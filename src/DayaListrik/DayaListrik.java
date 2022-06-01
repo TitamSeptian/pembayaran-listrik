@@ -8,11 +8,13 @@ import Config.Config;
 import Dashboard.Dashboard;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import java.awt.HeadlessException;
-import java.sql.Connection;
+import java.sql.*;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
+import DayaListrik.Model;
+
 
 /**
  *
@@ -23,6 +25,7 @@ public class DayaListrik extends javax.swing.JFrame {
     /**
      * Creates new form DayaListrik
      */
+    Model DayaModel = new Model();
     public DayaListrik() {
         initComponents();
         setLocationRelativeTo(null);
@@ -37,10 +40,7 @@ public class DayaListrik extends javax.swing.JFrame {
         model.addColumn("Golongan Tarif");
         
         try {
-            String sql = "select id,daya,golongan_tarif from daya";
-            java.sql.Connection conn=(Connection)Config.configDB();
-            java.sql.Statement stm=conn.createStatement();
-            java.sql.ResultSet res=stm.executeQuery(sql);
+            ResultSet res = DayaModel.getAll();
             while(res.next()){
                 model.addRow(new Object[]{res.getString(1),res.getString(2),res.getString(3)});
             }
@@ -220,50 +220,27 @@ public class DayaListrik extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
-        try {
-            String sql = "INSERT INTO daya VALUES (NULL, ?,?)";
-            java.sql.Connection conn=(Connection)Config.configDB();
-            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-            pst.setString(1, daya.getText());
-            pst.setString(2, golonganTarif.getText());
-            pst.execute();
-            JOptionPane.showMessageDialog(null, "Penyimpanan Data Berhasil");
+        boolean insert = DayaModel.insert(daya.getText(), golonganTarif.getText());
+        if(insert){
             loadTable();
             kosong();
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }        
+        }     
     }//GEN-LAST:event_simpanButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
-        try {
-            String sql = "UPDATE daya SET daya =?, golongan_tarif=? "; 
-            java.sql.Connection conn=(Connection)Config.configDB();
-            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-            pst.setString(1, daya.getText());
-            pst.setString(2, golonganTarif.getText());
-            pst.execute();
-            JOptionPane.showMessageDialog(null, "data berhasil di edit");
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(null, "Perubahan Data Gagal"+e.getMessage());
+        boolean update = DayaModel.update(daya.getText(), golonganTarif.getText(), idDaya.getText());
+        if(update){
+            loadTable();
+            kosong();
         }
-        loadTable();
-        kosong();
     }//GEN-LAST:event_EditButtonActionPerformed
 
     private void hapusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusButtonActionPerformed
-        try {
-            String sql ="DELETE FROM daya WHERE id = ?";
-            java.sql.Connection conn=(Connection)Config.configDB();
-            java.sql.PreparedStatement pst=conn.prepareStatement(sql);
-            pst.setString(1, idDaya.getText());
-            pst.execute();
-            JOptionPane.showMessageDialog(this, "berhasil di hapus");
-        } catch (HeadlessException | SQLException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        boolean delete = DayaModel.delete(idDaya.getText());
+        if(delete){
+           loadTable();
+            kosong(); 
         }
-        loadTable();
-        kosong();
     }//GEN-LAST:event_hapusButtonActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
