@@ -1,7 +1,7 @@
 package Auth;
 
 
-import Mahasiswa.Mahasiswa;
+import Dashboard.Dashboard;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import java.awt.HeadlessException;
 import java.sql.*;
@@ -145,8 +145,8 @@ public class Login extends javax.swing.JFrame {
             ResultSet result = pst.executeQuery(SQL);
             if(result.next()){
                 JOptionPane.showMessageDialog(null, "Login Berhasil");
-                Mahasiswa mhs = new Mahasiswa();
-                mhs.show(true);
+                Dashboard dsboard = new Dashboard();
+                dsboard.show(true);
                 this.show(false);
             }else{
                 JOptionPane.showMessageDialog(null, "Username atau Password Salah!");

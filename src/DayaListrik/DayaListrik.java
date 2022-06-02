@@ -4,16 +4,16 @@
  */
 package DayaListrik;
 
-import Config.Config;
 import Dashboard.Dashboard;
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import java.awt.HeadlessException;
 import java.sql.*;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
-import DayaListrik.Model;
+//import DayaListrik.Model;
+import Config.Model;
+import java.util.ArrayList;
 
 
 /**
@@ -40,7 +40,8 @@ public class DayaListrik extends javax.swing.JFrame {
         model.addColumn("Golongan Tarif");
         
         try {
-            ResultSet res = DayaModel.getAll();
+            Model DayaModel = new Model();
+            ResultSet res = DayaModel.getAll("daya");
             while(res.next()){
                 model.addRow(new Object[]{res.getString(1),res.getString(2),res.getString(3)});
             }
@@ -54,6 +55,10 @@ public class DayaListrik extends javax.swing.JFrame {
         daya.setText(null);
         golonganTarif.setText(null);
         idDaya.setText(null);
+        idDaya.setEditable(true);
+        EditButton.setEnabled(false);
+        hapusButton.setEnabled(false);
+        simpanButton.setEnabled(true);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -136,7 +141,11 @@ public class DayaListrik extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        idDaya.setEditable(false);
+        idDaya.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idDayaActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("ID");
 
@@ -220,7 +229,12 @@ public class DayaListrik extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
-        boolean insert = DayaModel.insert(daya.getText(), golonganTarif.getText());
+        Model model = new Model();
+        ArrayList<String> data = new ArrayList<String>();
+        data.add(idDaya.getText());
+        data.add(daya.getText());
+        data.add(golonganTarif.getText());
+        boolean insert = model.insert(data, "daya");
         if(insert){
             loadTable();
             kosong();
@@ -228,7 +242,17 @@ public class DayaListrik extends javax.swing.JFrame {
     }//GEN-LAST:event_simpanButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
-        boolean update = DayaModel.update(daya.getText(), golonganTarif.getText(), idDaya.getText());
+        ArrayList<String> data = new ArrayList<String>();
+        ArrayList<String> column = new ArrayList<String>();
+        String id = idDaya.getText();
+        if(id == null){
+            JOptionPane.showMessageDialog(null, "Tidak ada data yang di edit");
+            return;
+        }
+        column.add("daya");data.add(daya.getText());
+        column.add("golongan_tarif");data.add(golonganTarif.getText());
+        Model model = new Model();
+        boolean update = model.update(data, column, "daya", "id", idDaya.getText());
         if(update){
             loadTable();
             kosong();
@@ -236,7 +260,8 @@ public class DayaListrik extends javax.swing.JFrame {
     }//GEN-LAST:event_EditButtonActionPerformed
 
     private void hapusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusButtonActionPerformed
-        boolean delete = DayaModel.delete(idDaya.getText());
+        Model model = new Model();
+        boolean delete = model.delete("daya", "id", idDaya.getText());
         if(delete){
            loadTable();
             kosong(); 
@@ -254,17 +279,26 @@ public class DayaListrik extends javax.swing.JFrame {
         
         String id = jTable1.getValueAt(baris, 0).toString();
         idDaya.setText(id);
+        idDaya.setEditable(false);
         
         String dayaTable = jTable1.getValueAt(baris, 1).toString();
         daya.setText(dayaTable);
         
         String golonganTarifTable = jTable1.getValueAt(baris, 2).toString();
         golonganTarif.setText(golonganTarifTable);
+        
+        EditButton.setEnabled(true);
+        hapusButton.setEnabled(true);
+        simpanButton.setEnabled(false);
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         kosong();
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void idDayaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idDayaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idDayaActionPerformed
 
     /**
      * @param args the command line arguments
