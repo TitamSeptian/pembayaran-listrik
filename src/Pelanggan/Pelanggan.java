@@ -282,18 +282,21 @@ public class Pelanggan extends javax.swing.JFrame {
         ArrayList<String> data = new ArrayList<String>();
         ArrayList<String> column = new ArrayList<String>();
         String id = idPelanggan.getText();
-        if(id == null){
-            JOptionPane.showMessageDialog(null, "Tidak ada data yang di edit");
-            return;
-        }
-        column.add("nama");data.add(nama.getText());
-        column.add("no_telpon");data.add(noTelpon.getText());
-        column.add("alamat");data.add(alamat.getText());
-        Model model = new Model();
-        boolean update = model.update(data, column, "pelanggan", "id", idPelanggan.getText());
-        if(update){
-            loadTable();
-            kosong();
+        if(idPelanggan.getText().equals("") || nama.getText().equals("") || noTelpon.getText().equals("") || alamat.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "tidak boleh kosong");
+        }else {
+            column.add("nama");
+            data.add(nama.getText());
+            column.add("no_telpon");
+            data.add(noTelpon.getText());
+            column.add("alamat");
+            data.add(alamat.getText());
+            Model model = new Model();
+            boolean update = model.update(data, column, "pelanggan", "id", idPelanggan.getText());
+            if (update) {
+                loadTable();
+                kosong();
+            }
         }
     }//GEN-LAST:event_EditButtonActionPerformed
 

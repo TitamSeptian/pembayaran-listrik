@@ -231,31 +231,37 @@ public class DayaListrik extends javax.swing.JFrame {
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
         Model model = new Model();
         ArrayList<String> data = new ArrayList<String>();
-        data.add(idDaya.getText());
-        data.add(daya.getText());
-        data.add(golonganTarif.getText());
-        boolean insert = model.insert(data, "daya");
-        if(insert){
-            loadTable();
-            kosong();
-        }     
+        if (idDaya.getText().equals("") || golonganTarif.getText().equals("") || daya.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Harus diisi");
+        }else{
+            data.add(idDaya.getText());
+            data.add(daya.getText());
+            data.add(golonganTarif.getText());
+            boolean insert = model.insert(data, "daya");
+            if(insert){
+                loadTable();
+                kosong();
+            }
+        }
     }//GEN-LAST:event_simpanButtonActionPerformed
 
     private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
         ArrayList<String> data = new ArrayList<String>();
         ArrayList<String> column = new ArrayList<String>();
         String id = idDaya.getText();
-        if(id == null){
-            JOptionPane.showMessageDialog(null, "Tidak ada data yang di edit");
-            return;
-        }
-        column.add("daya");data.add(daya.getText());
-        column.add("golongan_tarif");data.add(golonganTarif.getText());
-        Model model = new Model();
-        boolean update = model.update(data, column, "daya", "id", idDaya.getText());
-        if(update){
-            loadTable();
-            kosong();
+        if (idDaya.getText().equals("") || golonganTarif.getText().equals("") || daya.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Harus diisi");
+        }else {
+            column.add("daya");
+            data.add(daya.getText());
+            column.add("golongan_tarif");
+            data.add(golonganTarif.getText());
+            Model model = new Model();
+            boolean update = model.update(data, column, "daya", "id", idDaya.getText());
+            if (update) {
+                loadTable();
+                kosong();
+            }
         }
     }//GEN-LAST:event_EditButtonActionPerformed
 

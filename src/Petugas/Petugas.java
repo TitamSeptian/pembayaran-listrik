@@ -251,13 +251,17 @@ public class Petugas extends javax.swing.JFrame {
     private void simpanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanButtonActionPerformed
         ArrayList<String> data = new ArrayList<String>();
         Model model = new Model();
-        data.add(kodePetugas.getText());
-        data.add(nama.getText());
-        data.add(alamat.getText());
-        boolean insert = model.insert(data, "petugas");
-        if(insert){
-            loadTable();
-            kosong();
+        if (kodePetugas.getText().equals("") || nama.getText().equals("") || alamat.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
+        } else {
+            data.add(kodePetugas.getText());
+            data.add(nama.getText());
+            data.add(alamat.getText());
+            boolean insert = model.insert(data, "petugas");
+            if (insert) {
+                loadTable();
+                kosong();
+            }
         }
     }//GEN-LAST:event_simpanButtonActionPerformed
 
@@ -266,12 +270,18 @@ public class Petugas extends javax.swing.JFrame {
         ArrayList<String> column = new ArrayList<String>();
         Model model = new Model();
 //        column.add(kodePetugas.getText());data.add(kodePetugas.getText());
-        column.add("nama");data.add(nama.getText());
-        column.add("alamat");data.add(alamat.getText());
-        boolean update = model.update(data, column, "petugas", "kode_petugas", kodePetugas.getText());
-        if(update){
-            kosong();
-            loadTable();
+        if (kodePetugas.getText().equals("") || nama.getText().equals("") || alamat.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
+        }else {
+            column.add("nama");
+            data.add(nama.getText());
+            column.add("alamat");
+            data.add(alamat.getText());
+            boolean update = model.update(data, column, "petugas", "kode_petugas", kodePetugas.getText());
+            if (update) {
+                kosong();
+                loadTable();
+            }
         }
     }//GEN-LAST:event_editButtonActionPerformed
 

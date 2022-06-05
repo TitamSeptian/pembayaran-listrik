@@ -300,17 +300,36 @@ public class Tagihan extends javax.swing.JFrame {
         ArrayList<String> data = new ArrayList<String>();
         ArrayList<String> column = new ArrayList<String>();
         Model model = new Model();
-        column.add("id");data.add(id_tagihan.getText());
-        column.add("id_pelanggan");data.add(comboPelanggan.getSelectedItem().toString());
-        column.add("tanggal");data.add(tanggal.getText());
-        column.add("id_daya");data.add(comboDaya.getSelectedItem().toString());
-        column.add("penggunaan");data.add(penggunaan.getText());
-        column.add("status");data.add("Belum");
-        column.add("total"); data.add(Integer.toString(Integer.parseInt(penggunaan.getText())*perkwh));
-        boolean insert = model.insertSet(data, column, "tagihan");
-        if(insert){
-            loadTable();
-            kosong();
+        if (id_tagihan.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "ID Tagihan tidak boleh kosong");
+        } else if (comboPelanggan.getSelectedItem().equals("")) {
+            JOptionPane.showMessageDialog(null, "Pelanggan tidak boleh kosong");
+        } else if (tanggal.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Tanggal tidak boleh kosong");
+        } else if (comboDaya.getSelectedItem().equals("")) {
+            JOptionPane.showMessageDialog(null, "Daya tidak boleh kosong");
+        } else if (penggunaan.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Penggunaan tidak boleh kosong");
+        } else {
+            column.add("id");
+            data.add(id_tagihan.getText());
+            column.add("id_pelanggan");
+            data.add(comboPelanggan.getSelectedItem().toString());
+            column.add("tanggal");
+            data.add(tanggal.getText());
+            column.add("id_daya");
+            data.add(comboDaya.getSelectedItem().toString());
+            column.add("penggunaan");
+            data.add(penggunaan.getText());
+            column.add("status");
+            data.add("Belum");
+            column.add("total");
+            data.add(Integer.toString(Integer.parseInt(penggunaan.getText()) * perkwh));
+            boolean insert = model.insertSet(data, column, "tagihan");
+            if (insert) {
+                loadTable();
+                kosong();
+            }
         }
     }//GEN-LAST:event_simpan_buttonActionPerformed
 
@@ -331,15 +350,32 @@ public class Tagihan extends javax.swing.JFrame {
                 if (resTagihan.getString("status").equals("selesai")){
                     JOptionPane.showMessageDialog(this, "Tagihan sudah selesai");
                 }else{
-                    column.add("id_pelanggan");data.add(comboPelanggan.getSelectedItem().toString());
-                    column.add("id_daya");data.add(comboDaya.getSelectedItem().toString());
-                    column.add("penggunaan");data.add(penggunaan.getText());
-                    column.add("tanggal");data.add(tanggal.getText());
-                    column.add("total");data.add(Integer.toString( Integer.parseInt(penggunaan.getText())*perkwh));
-                    boolean update =  model.update(data, column, "tagihan", "id", id_tagihan.getText());
-                    if(update){
-                        loadTable();
-                        kosong();
+                    if (id_tagihan.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "ID Tagihan tidak boleh kosong");
+                    } else if (comboPelanggan.getSelectedItem().equals("")) {
+                        JOptionPane.showMessageDialog(null, "Pelanggan tidak boleh kosong");
+                    } else if (tanggal.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "Tanggal tidak boleh kosong");
+                    } else if (comboDaya.getSelectedItem().equals("")) {
+                        JOptionPane.showMessageDialog(null, "Daya tidak boleh kosong");
+                    } else if (penggunaan.getText().equals("")) {
+                        JOptionPane.showMessageDialog(null, "Penggunaan tidak boleh kosong");
+                    } else {
+                        column.add("id_pelanggan");
+                        data.add(comboPelanggan.getSelectedItem().toString());
+                        column.add("id_daya");
+                        data.add(comboDaya.getSelectedItem().toString());
+                        column.add("penggunaan");
+                        data.add(penggunaan.getText());
+                        column.add("tanggal");
+                        data.add(tanggal.getText());
+                        column.add("total");
+                        data.add(Integer.toString(Integer.parseInt(penggunaan.getText()) * perkwh));
+                        boolean update = model.update(data, column, "tagihan", "id", id_tagihan.getText());
+                        if (update) {
+                            loadTable();
+                            kosong();
+                        }
                     }
                 }
             }
