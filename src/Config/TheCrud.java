@@ -14,4 +14,5 @@ public interface TheCrud{
     public boolean update(ArrayList data, ArrayList column,  String table, String columnWhere, String where);
     public boolean delete(String table, String column , String where);
     public ResultSet getAll(String table);
+    public ResultSet getDataById(String table, String column, String where);
 }

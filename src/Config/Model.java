@@ -102,5 +102,51 @@ public class Model implements TheCrud{
         }
     }
 
+    @Override
+    public ResultSet getDataById(String table, String column, String where){
+        try{
+            String query = "SELECT * FROM "+table+" WHERE "+column+"='"+where+"'";
+            java.sql.Connection conn=(Connection)Config.configDB();
+            java.sql.PreparedStatement pst=conn.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+            return rs;
+        }catch (HeadlessException | SQLException e) {
+            System.out.print(e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean insertSet(ArrayList data, ArrayList column, String table){
+        try{
+            int length = data.size();
+            String query = "INSERT INTO "+table+" (";
+            for(int i=0; i<length; i++){
+                query += column.get(i);
+                if(i<length-1){
+                    query += ",";
+                }
+            }
+            query += ") VALUES(";
+            for(int i=0; i<length; i++){
+                query += "'"+data.get(i)+"'";
+                if(i<length-1){
+                    query += ",";
+                }
+            }
+            query += ")";
+            System.out.println(query);
+            java.sql.Connection conn=(Connection)Config.configDB();
+            java.sql.PreparedStatement pst=conn.prepareStatement(query);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Penyimpanan Data Berhasil");
+            conn.close();
+            return true;
+        }catch (HeadlessException | SQLException e) {
+            System.out.print(e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            return false;
+        }
+    }
 
 }
