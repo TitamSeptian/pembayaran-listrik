@@ -34,6 +34,7 @@ public class Model implements TheCrud{
             query += ")";
             java.sql.Connection conn=(Connection)Config.configDB();
             java.sql.PreparedStatement pst=conn.prepareStatement(query);
+            System.out.print(query);
             pst.execute();
             JOptionPane.showMessageDialog(null, "Penyimpanan Data Berhasil");
             conn.close();
